@@ -82,7 +82,7 @@ Por eso vas a recibir tu protocolo personalizado.`;
 }
 
 export function getOfferTitle(gender: string): string {
-  return 'TU PROTOCOLO PERSONALIZADO ESTÁ LISTO';
+  return 'TU PLAN PERSONALIZADO ESTÁ LISTO';
 }
 
 export function getFeatures(gender: string): string[] {
