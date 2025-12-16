@@ -37,7 +37,6 @@ interface ResultProps {
 export default function Result({ onNavigate }: ResultProps) {
   const [revelation1, setRevelation1] = useState(false);
   const [revelation2, setRevelation2] = useState(false);
-  const [showOfferButton, setShowOfferButton] = useState(false);
   const [revelation3, setRevelation3] = useState(false);
   const [revelation4, setRevelation4] = useState(false);
   const [timeLeft, setTimeLeft] = useState(47 * 60);
@@ -46,14 +45,17 @@ export default function Result({ onNavigate }: ResultProps) {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingStep, setLoadingStep] = useState(0);
   
-  // ✨ NOVO: Estado para prova social dinâmica
+  // ✨ MUDANÇA #1: Novos estados
+  const [showVideoOutroText, setShowVideoOutroText] = useState(false);
+  const [showRevealOfferButtonDelayed, setShowRevealOfferButtonDelayed] = useState(false);
+  
+  // ✨ MUDANÇA #2: Prova social com valores realistas
   const [dynamicSocialProofData, setDynamicSocialProofData] = useState({
-    startedToday: 847,
-    contactedEx: 312,
-    metEx: 89
+    startedToday: 47,
+    contactedEx: 12,
+    metEx: 3
   });
   
-  // ✨ NOVO: Estado para controlar confete
   const [showConfetti, setShowConfetti] = useState(false);
   
   const quizData = storage.getQuizData();
@@ -70,7 +72,7 @@ export default function Result({ onNavigate }: ResultProps) {
   ];
 
   // ========================================
-  // ✅ SISTEMA DE PRESERVAÇÃO E ANEXAÇÃO DE UTMs
+  // ✅ SISTEMA DE PRESERVACIÓN Y ANEXACIÓN DE UTMs
   // ========================================
   
   const getUTMs = (): Record<string, string> => {
@@ -149,7 +151,7 @@ export default function Result({ onNavigate }: ResultProps) {
     loadingSteps.forEach((step, index) => {
       setTimeout(() => {
         setLoadingStep(index);
-        if (index > 0) playKeySound(); // ✨ SOM a cada step
+        if (index > 0) playKeySound();
       }, step.duration);
     });
 
@@ -165,12 +167,20 @@ export default function Result({ onNavigate }: ResultProps) {
       ga4Tracking.revelationViewed('Ventana 72 Horas', 2);
     }, 12500);
 
-    const timer3 = setTimeout(() => {
-      setShowOfferButton(true);
-      tracking.revelationViewed('vsl');
-      tracking.vslEvent('started');
-      ga4Tracking.videoStarted();
-    }, 15500);
+    // ✨ MUDANÇA #4: Novos timers para vídeo e botão
+    const videoLoadTime = 12500 + 500;
+    const assumedVideoPlayDuration = 10000;
+    const outroTextReadingTime = 3000;
+
+    const timerShowVideoOutro = setTimeout(() => {
+      setShowVideoOutroText(true);
+      tracking.revelationViewed('vsl_outro_text');
+    }, videoLoadTime + assumedVideoPlayDuration);
+
+    const timerShowRevealOfferButton = setTimeout(() => {
+      setShowRevealOfferButtonDelayed(true);
+      tracking.revelationViewed('vsl_offer_button_shown');
+    }, videoLoadTime + assumedVideoPlayDuration + outroTextReadingTime);
 
     const countdownInterval = setInterval(() => {
       setTimeLeft(prev => {
@@ -193,12 +203,12 @@ export default function Result({ onNavigate }: ResultProps) {
       });
     }, 45000);
 
-    // ✨ NOVO: Atualização dinâmica da prova social
+    // ✨ MUDANÇA #3: socialProofInterval com novos incrementos
     const socialProofInterval = setInterval(() => {
       setDynamicSocialProofData(prev => ({
-        startedToday: prev.startedToday + Math.floor(Math.random() * 3),
-        contactedEx: prev.contactedEx + Math.floor(Math.random() * 2),
-        metEx: prev.metEx + (Math.random() > 0.7 ? 1 : 0)
+        startedToday: prev.startedToday + Math.floor(Math.random() * 2),
+        contactedEx: prev.contactedEx + (Math.random() > 0.8 ? 1 : 0),
+        metEx: prev.metEx + (Math.random() > 0.95 ? 1 : 0)
       }));
     }, 45000);
 
@@ -206,7 +216,9 @@ export default function Result({ onNavigate }: ResultProps) {
       clearInterval(progressInterval);
       clearTimeout(timer1);
       clearTimeout(timer2);
-      clearTimeout(timer3);
+      // ✨ MUDANÇA #5: Cleanup dos novos timers
+      clearTimeout(timerShowVideoOutro);
+      clearTimeout(timerShowRevealOfferButton);
       clearInterval(countdownInterval);
       clearInterval(spotsInterval);
       clearInterval(socialProofInterval);
@@ -293,17 +305,16 @@ export default function Result({ onNavigate }: ResultProps) {
 
     setTimeout(() => {
       setRevelation4(true);
-      setShowConfetti(true); // ✨ ATIVA CONFETE
+      setShowConfetti(true);
       ga4Tracking.offerViewed();
       
-      // Remove confete após 3 segundos
       setTimeout(() => setShowConfetti(false), 3000);
     }, 3000);
   };
 
   return (
     <div className="result-container">
-      {/* ✨ CONFETE ANIMATION */}
+      {/* ✨ CONFETE */}
       {showConfetti && (
         <div style={{
           position: 'fixed',
@@ -343,9 +354,7 @@ export default function Result({ onNavigate }: ResultProps) {
 
       <div className="revelations-container">
         
-        {/* ========================================
-            FASE 1: LOADING INTELIGENTE
-            ======================================== */}
+        {/* FASE 1: LOADING */}
         {!revelation1 && (
           <div className="revelation fade-in" style={{
             display: 'flex',
@@ -489,9 +498,7 @@ export default function Result({ onNavigate }: ResultProps) {
           </div>
         )}
 
-        {/* ========================================
-            FASE 2: REVELACIÓN 1 - VALIDACIÓN EMOCIONAL
-            ======================================== */}
+        {/* FASE 2: VALIDACIÓN EMOCIONAL */}
         {revelation1 && (
           <div className="revelation fade-in">
             <div className="revelation-header">
@@ -505,9 +512,7 @@ export default function Result({ onNavigate }: ResultProps) {
           </div>
         )}
 
-        {/* ========================================
-            FASE 3: REVELACIÓN 2 - ESPERANZA (VENTANA 72H)
-            ======================================== */}
+        {/* FASE 3: VENTANA 72H */}
         {revelation2 && (
           <div className="revelation fade-in">
             <div style={{
@@ -669,31 +674,31 @@ export default function Result({ onNavigate }: ResultProps) {
               </div>
             </div>
 
-            {/* TEXTO APÓS VÍDEO */}
-            <div style={{
-              marginTop: 'clamp(24px, 6vw, 32px)',
-              padding: 'clamp(20px, 5vw, 28px)',
-              background: 'rgba(234, 179, 8, 0.1)',
-              border: '2px solid rgba(234, 179, 8, 0.3)',
-              borderRadius: '12px'
-            }}>
-              <p style={{
-                color: 'white',
-                fontSize: 'clamp(1rem, 4vw, 1.25rem)',
-                lineHeight: '1.7',
-                whiteSpace: 'pre-line',
-                margin: 0
+            {/* ✨ MUDANÇA #6: TEXTO APÓS VÍDEO */}
+            {showVideoOutroText && (
+              <div className="fade-in" style={{
+                marginTop: 'clamp(24px, 6vw, 32px)',
+                padding: 'clamp(20px, 5vw, 28px)',
+                background: 'rgba(234, 179, 8, 0.1)',
+                border: '2px solid rgba(234, 179, 8, 0.3)',
+                borderRadius: '12px'
               }}>
-                {getVideoOutroText(gender)}
-              </p>
-            </div>
+                <p style={{
+                  color: 'white',
+                  fontSize: 'clamp(1rem, 4vw, 1.25rem)',
+                  lineHeight: '1.7',
+                  whiteSpace: 'pre-line',
+                  margin: 0
+                }}>
+                  {getVideoOutroText(gender)}
+                </p>
+              </div>
+            )}
           </div>
         )}
 
-        {/* ========================================
-            BOTÃO REVELAR OFERTA
-            ======================================== */}
-        {showOfferButton && !revelation3 && (
+        {/* ✨ MUDANÇA #7: BOTÃO REVELAR OFERTA */}
+        {showRevealOfferButtonDelayed && !revelation3 && (
           <div className="revelation fade-in" style={{
             textAlign: 'center',
             padding: 'clamp(32px, 8vw, 64px) clamp(16px, 4vw, 24px)',
@@ -780,9 +785,7 @@ export default function Result({ onNavigate }: ResultProps) {
           </div>
         )}
 
-        {/* ========================================
-            FASE 4: REVELACIÓN 3 - PROTOCOLO ESPECÍFICO
-            ======================================== */}
+        {/* FASE 4: PROTOCOLO ESPECÍFICO */}
         {revelation3 && (
           <div 
             ref={offerSectionRef}
@@ -852,7 +855,6 @@ export default function Result({ onNavigate }: ResultProps) {
               </ul>
             </div>
 
-            {/* ✨ 4 ITENS DO PROTOCOLO COM ANIMAÇÃO DE CADEADO */}
             <div className="offer-features" style={{
               display: 'flex',
               flexDirection: 'column',
@@ -915,7 +917,7 @@ export default function Result({ onNavigate }: ResultProps) {
               </p>
             </div>
 
-            {/* ✨ PROVA SOCIAL DINÂMICA */}
+            {/* PROVA SOCIAL DINÂMICA */}
             <div style={{
               background: 'linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%)',
               border: '2px solid rgba(74, 222, 128, 0.3)',
@@ -1036,22 +1038,31 @@ export default function Result({ onNavigate }: ResultProps) {
           </div>
         )}
 
-        {/* ========================================
-            FASE 5: REVELACIÓN 4 - OFERTA FINAL + OBJEÇÃO HANDLING
-            ======================================== */}
+        {/* FASE 5: OFERTA FINAL */}
         {revelation4 && (
           <div className="revelation fade-in" style={{
             padding: 'clamp(20px, 5vw, 32px)'
           }}>
             
-            <div style={{
+            {/* ✨ MUDANÇA #9: BLOCO "OFERTA DESBLOQUEADA" */}
+            <div className="fade-in" style={{
               textAlign: 'center',
-              marginBottom: 'clamp(24px, 6vw, 32px)'
+              marginBottom: 'clamp(24px, 6vw, 32px)',
+              background: 'linear-gradient(135deg, rgba(74, 222, 128, 0.2) 0%, rgba(34, 197, 94, 0.1) 100%)',
+              border: '3px solid rgb(74, 222, 128)',
+              borderRadius: '16px',
+              padding: 'clamp(24px, 6vw, 32px)',
+              boxShadow: '0 8px 32px rgba(74, 222, 128, 0.4)',
+              animationDelay: '0.5s'
             }}>
+              <div style={{
+                fontSize: 'clamp(2.5rem, 8vw, 3.5rem)',
+                marginBottom: 'clamp(16px, 4vw, 24px)'
+              }}>🎉</div>
               <h2 style={{
                 fontSize: 'clamp(1.75rem, 7vw, 2.5rem)',
                 fontWeight: '900',
-                color: 'rgb(234, 179, 8)',
+                color: 'rgb(74, 222, 128)',
                 marginBottom: 'clamp(16px, 4vw, 20px)',
                 lineHeight: '1.3'
               }}>
@@ -1085,40 +1096,50 @@ export default function Result({ onNavigate }: ResultProps) {
               </p>
             </div>
 
-            {/* ✨ OBJEÇÃO HANDLING */}
+            {/* ✨ MUDANÇA #8: OBJEÇÃO HANDLING COM ÍCONES */}
             <div style={{
               marginBottom: 'clamp(32px, 7vw, 48px)'
             }}>
               {getObjetionHandling().map((obj, index) => (
                 <div 
                   key={index}
-                  className="fade-in"
+                  className="fade-in objection-item"
                   style={{
                     background: 'rgba(0, 0, 0, 0.3)',
                     border: '2px solid rgba(234, 179, 8, 0.3)',
                     borderRadius: '12px',
                     padding: 'clamp(20px, 5vw, 24px)',
                     marginBottom: 'clamp(16px, 4vw, 20px)',
-                    animationDelay: `${index * 0.2}s`
+                    animationDelay: `${index * 0.2}s`,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px'
                   }}
                 >
                   <h3 style={{
                     fontSize: 'clamp(1.125rem, 4.5vw, 1.5rem)',
                     fontWeight: '900',
                     color: 'rgb(234, 179, 8)',
-                    marginBottom: 'clamp(12px, 3vw, 16px)',
-                    lineHeight: '1.3'
+                    lineHeight: '1.3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    margin: 0
                   }}>
-                    {obj.question}
+                    <span style={{ fontSize: '1.5em', minWidth: '30px', textAlign: 'center' }}>❓</span> {obj.question}
                   </h3>
                   <p style={{
                     color: 'white',
                     fontSize: 'clamp(0.9rem, 3.5vw, 1.125rem)',
                     lineHeight: '1.7',
                     whiteSpace: 'pre-line',
-                    margin: 0
+                    margin: 0,
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px'
                   }}>
-                    {obj.answer}
+                    <span style={{ fontSize: '1.5em', color: 'rgb(74, 222, 128)', minWidth: '30px', textAlign: 'center', marginTop: '2px' }}>✅</span> 
+                    <span>{obj.answer}</span>
                   </p>
                 </div>
               ))}
@@ -1242,9 +1263,7 @@ export default function Result({ onNavigate }: ResultProps) {
         )}
       </div>
 
-      {/* ========================================
-          CTA STICKY (RODAPÉ FIXO)
-          ======================================== */}
+      {/* CTA STICKY */}
       {revelation4 && (
         <div className="sticky-cta" style={{
           position: 'fixed',
@@ -1297,9 +1316,7 @@ export default function Result({ onNavigate }: ResultProps) {
         </div>
       )}
 
-      {/* ========================================
-          KEYFRAMES CSS
-          ======================================== */}
+      {/* KEYFRAMES CSS */}
       <style jsx>{`
         @keyframes spin {
           from {
@@ -1343,14 +1360,12 @@ export default function Result({ onNavigate }: ResultProps) {
 
         @keyframes unlockAnimation {
           0% {
-            content: '🔒';
             transform: rotate(0deg) scale(1);
           }
           50% {
             transform: rotate(20deg) scale(1.2);
           }
           100% {
-            content: '🔓';
             transform: rotate(0deg) scale(1);
           }
         }

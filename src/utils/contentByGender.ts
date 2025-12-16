@@ -2,7 +2,7 @@ import { QuizData } from '../types/quiz';
 
 // ========================================
 // FUNÇÕES DE PERSONALIZAÇÃO POR GÊNERO
-// COPY OTIMIZADO - VERSÃO 2.0
+// COPY OTIMIZADO - VERSÃO 2.0 COMPLETA
 // ========================================
 
 export function getTitle(gender: string): string {
@@ -10,14 +10,6 @@ export function getTitle(gender: string): string {
 }
 
 export function getLoadingMessage(gender: string): string {
-  const messages = [
-    'Procesando tus respuestas...',
-    'Analizando los patrones que hicieron que se alejara...',
-    'Descubriendo la VENTANA DE OPORTUNIDAD...',
-    'Generando tu protocolo de 72 horas...'
-  ];
-  
-  // Retorna mensagem baseada no progresso (será controlado pelo componente)
   return gender === 'HOMBRE'
     ? 'Generando tu protocolo de 72 horas...'
     : 'Generando tu protocolo de 72 horas...';
@@ -37,7 +29,7 @@ export function getCopy(quizData: QuizData): string {
 
 Pero aquí está lo más importante:
 
-+12.000 personas ya pasaron EXACTAMENTE 
++12.847 personas ya pasaron EXACTAMENTE 
 por lo que estás viviendo ahora.
 
 ¿Y sabes qué descubrieron?
