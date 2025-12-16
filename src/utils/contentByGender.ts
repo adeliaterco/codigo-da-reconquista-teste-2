@@ -37,7 +37,7 @@ export function getCopy(quizData: QuizData): string {
 
 Pero aquí está lo más importante:
 
-+12.847 personas ya pasaron EXACTAMENTE 
++12.000 personas ya pasaron EXACTAMENTE 
 por lo que estás viviendo ahora.
 
 ¿Y sabes qué descubrieron?
