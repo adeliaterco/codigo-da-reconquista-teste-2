@@ -2,71 +2,178 @@ import { QuizData } from '../types/quiz';
 
 // ========================================
 // FUNÇÕES DE PERSONALIZAÇÃO POR GÊNERO
+// COPY OTIMIZADO - VERSÃO 2.0
 // ========================================
 
 export function getTitle(gender: string): string {
-  return gender === 'HOMBRE' 
-    ? 'Por Qué Ella Se Fue' 
-    : 'Por Qué Él Se Fue';
+  return 'NO ESTÁS SOLO';
 }
 
 export function getLoadingMessage(gender: string): string {
+  const messages = [
+    'Procesando tus respuestas...',
+    'Analizando los patrones que hicieron que se alejara...',
+    'Descubriendo la VENTANA DE OPORTUNIDAD...',
+    'Generando tu protocolo de 72 horas...'
+  ];
+  
+  // Retorna mensagem baseada no progresso (será controlado pelo componente)
   return gender === 'HOMBRE'
-    ? 'Generando tu protocolo específico para reconquistar a ella...'
-    : 'Generando tu protocolo específico para reconquistar a él...';
+    ? 'Generando tu protocolo de 72 horas...'
+    : 'Generando tu protocolo de 72 horas...';
 }
 
 export function getCopy(quizData: QuizData): string {
-  const pronoun = quizData.gender === 'HOMBRE' ? 'ella' : 'él';
-  
-  return `No fue por falta de amor.
+  const timeSep = quizData.timeSeparation || 'Reciente';
+  const whoEnded = quizData.whoEnded || 'No especificado';
+  const situation = quizData.currentSituation || 'No especificado';
+  const commitment = quizData.commitmentLevel || 'No especificado';
 
-Fue porque en algún momento dejaste de ser lo que ${pronoun} necesitaba en ese momento.
+  return `Tu situación específica:
+✓ Tiempo de separación: ${timeSep}
+✓ Quién terminó: ${whoEnded}
+✓ Situación actual: ${situation}
+✓ Tu nivel de compromiso: ${commitment}
 
-Pero aquí está la verdad: eso puede cambiar.
+Pero aquí está lo más importante:
 
-Y en el siguiente paso, voy a revelar EXACTAMENTE qué fue lo que cambió y el paso a paso científico para que ${pronoun} sienta que SÍ eres la persona correcta.`;
++12.847 personas ya pasaron EXACTAMENTE 
+por lo que estás viviendo ahora.
+
+¿Y sabes qué descubrieron?
+
+Que la ruptura no es el final.
+Es solo una pausa.
+
+Una pausa que TÚ puedes revertir.
+
+Porque existe un patrón.
+Un protocolo que funciona.
+
+Y estás a punto de descubrir cuál es el tuyo.`;
 }
 
 export function getVentana72Copy(gender: string): string {
-  const pronoun = gender === 'HOMBRE' ? 'ella' : 'él';
-  
-  return `Aquí está lo crucial:
+  return `Pero aquí está el secreto que lo cambia todo:
 
-En cada una de estas 3 fases, hay acciones CORRECTAS e INCORRECTAS.
+En CADA FASE, existe una acción específica 
+que puedes hacer para reactivar sus sentimientos.
 
-Si actúas correcto en cada fase, ${pronoun} te busca.
-Si actúas incorrecto, su cerebro borra la atracción.
+No es manipulación.
+No es juego psicológico.
 
-Tu plan personalizado revela EXACTAMENTE qué hacer en cada fase.`;
+Es simplemente entender cómo funciona su cerebro.
+Y usar ese conocimiento a tu favor.`;
+}
+
+export function getVideoIntroText(gender: string): string {
+  return 'Mira cómo funciona (2 min)';
+}
+
+export function getVideoOutroText(gender: string): string {
+  return `Ahora viste cómo funciona.
+
+Pero aquí está la verdad:
+
+Saber no es suficiente.
+
+Necesitas un PLAN PASO A PASO.
+Un protocolo que puedas seguir 
+EXACTAMENTE como fue hecho.
+
+Porque en las próximas 72 horas,
+cada acción que tomes va a contar.
+
+Y necesitas saber EXACTAMENTE qué hacer.
+
+Por eso vas a recibir tu protocolo personalizado.`;
 }
 
 export function getOfferTitle(gender: string): string {
-  return gender === 'HOMBRE'
-    ? 'Tu Plan de 21 Días para Reconquistar a Ella'
-    : 'Tu Plan de 21 Días para Reconquistar a Él';
+  return 'TU PROTOCOLO PERSONALIZADO ESTÁ LISTO';
 }
 
 export function getFeatures(gender: string): string[] {
-  const pronoun = gender === 'HOMBRE' ? 'Ella' : 'Él';
-  const pronounLower = gender === 'HOMBRE' ? 'ella' : 'él';
-  const another = gender === 'HOMBRE' ? 'otro' : 'otra';
-  
   return [
-    `📱 MÓDULO 1: Cómo Hablar Con ${pronoun} (Días 1-7)`,
-    `👥 MÓDULO 2: Cómo Encontrarte Con ${pronoun} (Días 8-14)`,
-    `❤️ MÓDULO 3: Cómo Reconquistar${pronounLower === 'ella' ? 'la' : 'lo'} (Días 15-21)`,
-    `🚨 MÓDULO 4: Protocolo de Emergencia (Si ${pronounLower} está con ${another})`,
-    '⚡ Guía especial: Las 3 Fases de 72 Horas',
-    '🎯 Bonos: Scripts de conversación + Planes de acción',
-    '✅ Garantía: 30 días o tu dinero de vuelta'
+    '📱 FASE 0-24h: El Primer Contacto\n"El mensaje exacto que debes enviar"\n"Cómo romper el silencio sin parecer desesperado"',
+    '💬 FASE 24-48h: La Reconexión Emocional\n"Cómo hacer que QUIERA hablar contigo"\n"Los gatillos emocionales que funcionan"',
+    '❤️ FASE 48-72h: El Punto de Inflexión\n"Cómo transformar una conversación en un encuentro"\n"Qué decir para que quiera verte"',
+    '🔥 DÍAS 4-21: El Protocolo de Consolidación\n"Cómo mantener el momentum"\n"Cómo evitar los errores que hacen que se aleje de nuevo"'
   ];
 }
 
+export function getFeaturesExtraText(gender: string): string {
+  return `Cada protocolo es específico para TU situación.
+Cada uno fue probado con +12.847 personas.
+Cada uno funciona.
+
+Y tienes acceso a TODOS ellos.`;
+}
+
 export function getCTA(gender: string): string {
-  return gender === 'HOMBRE'
-    ? 'SÍ, QUIERO MI PLAN PARA RECONQUISTAR A ELLA'
-    : 'SÍ, QUIERO MI PLAN PARA RECONQUISTAR A ÉL';
+  return '🔓 SÍ, QUIERO MI PLAN AHORA (Acceso Inmediato - $12.99)';
+}
+
+export function getOfferSubtitle(gender: string): string {
+  return 'Acceso Inmediato al Plan de Reconquista Personalizado (30 días de acceso total)';
+}
+
+export function getPreCTAText(gender: string): string {
+  return `Ya hiciste el trabajo más difícil.
+
+Respondiste las preguntas.
+Descubriste por qué se alejó.
+Viste el protocolo que funciona.
+
+Ahora es momento de ACTUAR.`;
+}
+
+export function getObjetionHandling(): { question: string; answer: string }[] {
+  return [
+    {
+      question: '¿Y si no funciona?',
+      answer: `Tienes 30 días de acceso total.
+Si en 30 días no tienes progreso,
+sabes exactamente qué hacer.
+
+Pero aquí está la verdad:
+Si sigues el protocolo, TENDRÁS progreso.
+Porque +12.847 personas ya lo tuvieron.`
+    },
+    {
+      question: '¿Es caro?',
+      answer: `$12.99 es menos que un café.
+Menos que una comida.
+
+¿Pero el valor que vas a recibir?
+Invaluable.
+
+Porque vas a recuperarla.`
+    },
+    {
+      question: '¿No tengo tiempo?',
+      answer: `Cada protocolo toma 5-10 minutos por día.
+¿Puedes sacar 5 minutos de tu día
+para reconquistar a la persona que amas?`
+    }
+  ];
+}
+
+export function getFinalCTAText(gender: string): string {
+  return `En las próximas 72 horas, vas a:
+✓ Hacer el primer contacto correcto
+✓ Reactivar sus sentimientos
+✓ Transformar contacto en reconquista
+
+Todo paso a paso.
+Todo personalizado para tu situación.
+Todo a tu ritmo.
+
+Pero necesitas comenzar AHORA.
+
+Porque la Ventana de 72 Horas no espera.
+
+¿Cuál es tu elección?`;
 }
 
 export function getCompletionBadge(gender: string): { title: string; subtitle: string } {
@@ -82,10 +189,38 @@ export function getFaseText(gender: string, fase: number): string {
   const pronoun = gender === 'HOMBRE' ? 'Ella' : 'Él';
   
   const fases: Record<number, string> = {
-    1: `Dopamina cae 67% → ${pronoun} siente "alivio"`,
-    2: `Oxitocina se desconecta → ${pronoun} "olvida" los buenos momentos`,
-    3: `Córtex prefrontal reescribe memorias → ${pronoun} te ve diferente`
+    1: `${pronoun} siente "alivio" inicial → La dopamina cae 67%`,
+    2: `${pronoun} "olvida" los buenos momentos → La oxitocina se desconecta`,
+    3: `${pronoun} te ve diferente → El córtex prefrontal reescribe memorias`
   };
   
   return fases[fase] || '';
+}
+
+export function getRevealOfferButtonText(): string {
+  return '🔓 VER MI OFERTA EXCLUSIVA';
+}
+
+export function getRevealOfferTitle(): string {
+  return 'Tu Oferta Exclusiva Está Lista';
+}
+
+export function getRevealOfferSubtitle(): string {
+  return 'Acceso inmediato al Plan Completo de 21 Días';
+}
+
+export function getSocialProofText(): string {
+  return 'VE EL PROGRESO DE QUIENES YA COMENZARON';
+}
+
+export function getSocialProofDescription(): string {
+  return `Estas son personas COMO TÚ.
+Que estaban en la misma situación.
+Y que comenzaron hoy.
+
+¿Quieres estar entre ellas?`;
+}
+
+export function getOfferUnlockedTitle(): string {
+  return 'DESBLOQUEASTE TU OFERTA EXCLUSIVA';
 }
