@@ -103,7 +103,7 @@ Y tienes acceso a TODOS ellos.`;
 }
 
 export function getCTA(gender: string): string {
-  return '🔓 SÍ, QUIERO MI PLAN AHORA (Acceso Inmediato - $12.99)';
+  return '🔓 SÍ, QUIERO MI PLAN AHORA (Acceso Inmediato - $9,90)';
 }
 
 export function getOfferSubtitle(gender: string): string {
@@ -134,7 +134,7 @@ Porque +12.847 personas ya lo tuvieron.`
     },
     {
       question: '¿Es caro?',
-      answer: `$12.99 es menos que un café.
+      answer: `$9,90 es menos que un café.
 Menos que una comida.
 
 ¿Pero el valor que vas a recibir?
